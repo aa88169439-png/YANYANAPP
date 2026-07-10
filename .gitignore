@@ -1,7 +1,8 @@
 __pycache__/
 *.pyc
 *.pyo
-*.spec
+# PyInstaller spec files (root level only)
+/*.spec
 build/
 dist/
 *.db
