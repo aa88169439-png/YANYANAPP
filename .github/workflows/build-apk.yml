@@ -41,14 +41,17 @@ jobs:
           unzip -q cmdline-tools.zip
           mkdir -p android-sdk/cmdline-tools
           mv cmdline-tools android-sdk/cmdline-tools/latest
-          yes | android-sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=$PWD/android-sdk --licenses > /dev/null 2>&1 || true
-          yes | android-sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=$PWD/android-sdk \
+          # Buildozer 1.6 expects sdkmanager at tools/bin/sdkmanager (legacy path)
+          ln -sf cmdline-tools/latest android-sdk/tools
+          export SDK_ROOT=$PWD/android-sdk
+          yes | $SDK_ROOT/tools/bin/sdkmanager --sdk_root=$SDK_ROOT --licenses > /dev/null 2>&1 || true
+          yes | $SDK_ROOT/tools/bin/sdkmanager --sdk_root=$SDK_ROOT \
             "platform-tools" \
             "platforms;android-34" \
             "build-tools;34.0.0" \
             "ndk;27.0.12077973" > /dev/null 2>&1 || true
-          echo "Android SDK installed at $PWD/android-sdk"
-          ls -la $PWD/android-sdk/build-tools/ 2>/dev/null || echo "No build-tools dir"
+          echo "Android SDK installed at $SDK_ROOT"
+          ls $SDK_ROOT/build-tools/ 2>/dev/null || echo "No build-tools dir"
 
       - name: Cache Buildozer
         uses: actions/cache@v4
