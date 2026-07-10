@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+*.pyo
+*.spec
+build/
+dist/
+*.db
+config.json
+kivy_app/bin/
+kivy_app/.buildozer/
+*.log
