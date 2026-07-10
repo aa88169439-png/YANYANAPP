@@ -26,11 +26,12 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y -qq git zip unzip openjdk-17-jdk \
             python3-pip autoconf libtool pkg-config zlib1g-dev \
-            libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev \
-            libssl-dev libltdl-dev
+            libncurses-dev cmake libffi-dev libssl-dev libltdl-dev
 
-      - name: Install Buildozer
-        run: pip install --user buildozer cython
+      - name: Install Buildozer and Cython
+        run: |
+          pip install --user --break-system-packages buildozer cython setuptools
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
 
       - name: Cache Buildozer
         uses: actions/cache@v4
@@ -41,9 +42,7 @@ jobs:
           key: ${{ runner.os }}-buildozer-${{ hashFiles('buildozer.spec') }}
 
       - name: Build APK with Buildozer
-        run: |
-          export PATH=$PATH:~/.local/bin
-          buildozer android debug
+        run: buildozer android debug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
