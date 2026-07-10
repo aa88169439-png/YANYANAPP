@@ -28,10 +28,27 @@ jobs:
             python3-pip autoconf libtool pkg-config zlib1g-dev \
             libncurses-dev cmake libffi-dev libssl-dev libltdl-dev
 
-      - name: Install Buildozer and Cython
+      - name: Install Buildozer
         run: |
           pip install --user --break-system-packages buildozer cython setuptools
           echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: Install Android SDK
+        run: |
+          mkdir -p ~/.buildozer/android/platform
+          cd ~/.buildozer/android/platform
+          curl -sSL -o cmdline-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+          unzip -q cmdline-tools.zip
+          mkdir -p android-sdk/cmdline-tools
+          mv cmdline-tools android-sdk/cmdline-tools/latest
+          yes | android-sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=$PWD/android-sdk --licenses > /dev/null 2>&1 || true
+          yes | android-sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=$PWD/android-sdk \
+            "platform-tools" \
+            "platforms;android-34" \
+            "build-tools;34.0.0" \
+            "ndk;27.0.12077973" > /dev/null 2>&1 || true
+          echo "Android SDK installed at $PWD/android-sdk"
+          ls -la $PWD/android-sdk/build-tools/ 2>/dev/null || echo "No build-tools dir"
 
       - name: Cache Buildozer
         uses: actions/cache@v4
