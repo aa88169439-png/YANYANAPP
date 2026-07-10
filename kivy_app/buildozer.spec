@@ -5,8 +5,6 @@ package.domain = com.yinyin
 source.dir = .
 source.include_exts = py,png,jpg,kv,atlas,ttf
 version = 1.0.0
-version.regex = __version__ = ['"](.*)['"]
-version.filename = %(source.dir)s/main.py
 requirements = python3,kivy==2.3.1,kivymd==1.2.0,openai
 orientation = portrait
 osx.package_name = YinYinApp
