@@ -262,9 +262,11 @@ class YinYinApp(App):
             ("Vocab", "vocab"),
             ("Settings", "settings"),
         ]
+        def switch_to(screen_name):
+            return lambda x: setattr(sm, "current", screen_name)
         for label, screen in nav_btns:
             btn = Button(text=label)
-            btn.bind(on_press=lambda x, s=screen: sm.current = s)
+            btn.bind(on_press=switch_to(screen))
             nav.add_widget(btn)
         root.add_widget(nav)
 
